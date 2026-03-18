@@ -6,266 +6,141 @@
   <title>Futures Funding Council of Agents</title>
   <style>
     :root {
-      --bg-1: #081120;
-      --bg-2: #0d1c33;
-      --panel: rgba(10, 22, 40, 0.7);
-      --line: rgba(99, 179, 237, 0.28);
-      --text: #e8f1ff;
-      --muted: #9fb6d8;
-      --accent: #54c2ff;
-      --accent-2: #7c5cff;
-      --glow: 0 0 30px rgba(84, 194, 255, 0.25);
+      --bg: #081120;
+      --panel: #0d1c33;
+      --line: rgba(255,255,255,.10);
+      --text: #eef4ff;
+      --muted: #a9bbd6;
+      --accent: #63c7ff;
     }
-
     * { box-sizing: border-box; }
     body {
       margin: 0;
-      min-height: 100vh;
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: linear-gradient(180deg, #081120, #0d1c33 60%, #081120);
       color: var(--text);
-      background:
-        radial-gradient(circle at 20% 20%, rgba(84,194,255,.14), transparent 28%),
-        radial-gradient(circle at 80% 12%, rgba(124,92,255,.18), transparent 24%),
-        linear-gradient(160deg, var(--bg-1), var(--bg-2) 60%, #09131f);
-      overflow-x: hidden;
     }
-
-    .grid {
-      position: fixed;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
-      background-size: 48px 48px;
-      mask-image: linear-gradient(to bottom, rgba(0,0,0,.8), rgba(0,0,0,.25));
-      pointer-events: none;
-    }
-
-    .orb {
-      position: fixed;
-      border-radius: 999px;
-      filter: blur(16px);
-      opacity: .35;
-      pointer-events: none;
-      animation: drift 14s ease-in-out infinite;
-    }
-    .orb.one { width: 220px; height: 220px; background: rgba(84,194,255,.18); top: 8%; left: 6%; }
-    .orb.two { width: 180px; height: 180px; background: rgba(124,92,255,.18); top: 58%; right: 9%; animation-duration: 18s; }
-    .orb.three { width: 140px; height: 140px; background: rgba(52,211,153,.18); bottom: 10%; left: 18%; animation-duration: 16s; }
-
-    @keyframes drift {
-      0%,100% { transform: translate3d(0,0,0) scale(1); }
-      50% { transform: translate3d(26px,-20px,0) scale(1.08); }
-    }
-
     .wrap {
-      position: relative;
-      max-width: 1360px;
+      max-width: 1080px;
       margin: 0 auto;
-      padding: 40px 20px 64px;
+      padding: 16px 14px 32px;
     }
-
-    .hero {
-      position: relative;
-      border: 1px solid var(--line);
-      background: linear-gradient(180deg, rgba(14,25,45,.82), rgba(9,18,34,.68));
-      box-shadow: var(--glow);
-      border-radius: 24px;
-      padding: 28px;
-      overflow: hidden;
+    .top {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(10px);
+      background: rgba(8, 17, 32, 0.82);
+      border-bottom: 1px solid rgba(255,255,255,.08);
     }
-
-    .hero::after {
-      content: "";
-      position: absolute;
-      inset: -30% auto auto -10%;
-      width: 280px;
-      height: 280px;
-      background: radial-gradient(circle, rgba(84,194,255,.22), transparent 60%);
-      animation: pulse 7s ease-in-out infinite;
-    }
-
-    @keyframes pulse {
-      0%,100% { transform: scale(1); opacity: .7; }
-      50% { transform: scale(1.15); opacity: 1; }
-    }
-
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: rgba(84,194,255,.10);
-      border: 1px solid rgba(84,194,255,.18);
-      color: #bfe7ff;
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: .12em;
-    }
-
-    h1 {
-      margin: 16px 0 8px;
-      font-size: clamp(32px, 5vw, 56px);
-      line-height: .98;
-      max-width: 780px;
-    }
-
-    .sub {
-      margin: 0;
-      max-width: 760px;
-      color: var(--muted);
-      font-size: clamp(16px, 2vw, 20px);
-      line-height: 1.5;
-    }
-
-    .meta {
+    .top-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 12px 14px;
       display: flex;
-      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
       gap: 12px;
-      margin-top: 20px;
     }
-
-    .meta span {
-      padding: 10px 14px;
-      border-radius: 14px;
-      background: rgba(255,255,255,.04);
-      border: 1px solid rgba(255,255,255,.08);
-      color: #d7e7ff;
-      font-size: 14px;
+    h1 {
+      margin: 0;
+      font-size: 16px;
+      line-height: 1.2;
     }
-
-    .frame {
-      margin-top: 24px;
-      border-radius: 22px;
-      overflow: hidden;
-      border: 1px solid rgba(255,255,255,.10);
+    .sub {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 2px;
+    }
+    .actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    .btn {
+      text-decoration: none;
+      color: white;
+      background: linear-gradient(135deg, #1d4ed8, #2563eb);
+      padding: 10px 12px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .btn.secondary {
+      background: rgba(255,255,255,.06);
+      border: 1px solid var(--line);
+      color: var(--text);
+    }
+    .card {
+      margin-top: 16px;
       background: rgba(255,255,255,.03);
-      box-shadow: 0 22px 80px rgba(0,0,0,.35);
-      transform: perspective(1400px) rotateX(1.5deg);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(0,0,0,.25);
     }
-
-    .frame img {
+    .hint {
+      padding: 12px 14px;
+      color: var(--muted);
+      font-size: 13px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .image-link {
+      display: block;
+      line-height: 0;
+      background: #0b1730;
+    }
+    .image-link img {
       display: block;
       width: 100%;
       height: auto;
     }
-
-    .scan {
-      position: absolute;
-      inset: auto 0 0 0;
-      height: 120px;
-      background: linear-gradient(to bottom, transparent, rgba(84,194,255,.10), transparent);
-      mix-blend-mode: screen;
-      animation: scan 6s linear infinite;
-      pointer-events: none;
-    }
-
-    @keyframes scan {
-      0% { transform: translateY(-720px); }
-      100% { transform: translateY(720px); }
-    }
-
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 16px;
-      margin-top: 22px;
-    }
-
-    .card {
-      position: relative;
-      padding: 18px;
-      border-radius: 18px;
-      background: var(--panel);
-      border: 1px solid rgba(255,255,255,.08);
-      backdrop-filter: blur(14px);
-      box-shadow: 0 12px 36px rgba(0,0,0,.18);
-      overflow: hidden;
-    }
-
-    .card::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: -40%;
-      width: 40%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,.08), transparent);
-      transform: skewX(-18deg);
-      animation: shimmer 8s ease-in-out infinite;
-    }
-
-    @keyframes shimmer {
-      0%, 100% { left: -45%; }
-      50% { left: 115%; }
-    }
-
-    .card h3 {
-      margin: 0 0 8px;
-      font-size: 16px;
-    }
-
-    .card p {
-      margin: 0;
+    .footer-note {
+      margin-top: 14px;
       color: var(--muted);
-      font-size: 14px;
-      line-height: 1.5;
-    }
-
-    footer {
-      padding: 28px 8px 0;
-      color: #90a8c8;
       font-size: 13px;
       text-align: center;
+    }
+    @media (max-width: 700px) {
+      .top-inner {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+      .actions {
+        width: 100%;
+        justify-content: stretch;
+      }
+      .btn {
+        flex: 1 1 auto;
+        text-align: center;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="grid"></div>
-  <div class="orb one"></div>
-  <div class="orb two"></div>
-  <div class="orb three"></div>
+  <div class="top">
+    <div class="top-inner">
+      <div>
+        <h1>Futures Funding Council of Agents</h1>
+        <div class="sub">Mobile-friendly viewer</div>
+      </div>
+      <div class="actions">
+        <a class="btn" href="council-of-agents.png" target="_blank" rel="noopener">Open Full Image</a>
+        <a class="btn secondary" href="council-of-agents.png" download>Download PNG</a>
+      </div>
+    </div>
+  </div>
 
   <main class="wrap">
-    <section class="hero">
-      <div class="eyebrow">Live visual · Futures Funding</div>
-      <h1>Futures Funding Council of Agents</h1>
-      <p class="sub">A live, polished presentation view of the operating structure around Ryan, Max/OpenClaw, Mission Control, and the extended council of specialized agents.</p>
-      <div class="meta">
-        <span>Animated presentation layer</span>
-        <span>Public shareable link</span>
-        <span>Built from localhost org chart</span>
-      </div>
-
-      <div class="frame">
+    <section class="card">
+      <div class="hint">Tap the image or use “Open Full Image” to zoom in clearly.</div>
+      <a class="image-link" href="council-of-agents.png" target="_blank" rel="noopener">
         <img src="council-of-agents.png" alt="Futures Funding Council of Agents org chart" />
-        <div class="scan"></div>
-      </div>
-
-      <div class="cards">
-        <article class="card">
-          <h3>Executive Layer</h3>
-          <p>Ryan remains the principal decision-maker, with Max serving as the central operator and translator of system output.</p>
-        </article>
-        <article class="card">
-          <h3>Operational Core</h3>
-          <p>Mission Control, workflow triggers, and system-of-record inputs route work into specialized agent roles.</p>
-        </article>
-        <article class="card">
-          <h3>Council Structure</h3>
-          <p>The council model separates execution, intelligence, documentation, risk monitoring, and borrower/process support.</p>
-        </article>
-        <article class="card">
-          <h3>Presentation Mode</h3>
-          <p>This version adds motion, glow, and cinematic polish without touching the production business site.</p>
-        </article>
-      </div>
+      </a>
     </section>
-
-    <footer>
-      Built as a standalone share page outside the main Futures Funding site.
-    </footer>
+    <div class="footer-note">This page was simplified for fast mobile viewing.</div>
   </main>
 </body>
 </html>
