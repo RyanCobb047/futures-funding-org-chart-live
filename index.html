@@ -3,312 +3,602 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Futures Funding + Claw Vision Map</title>
+  <title>Futures Funding Interactive Org Map</title>
   <style>
     :root {
-      --bg: #07111f;
-      --panel: #0d1b2e;
-      --panel-2: #11253f;
+      --bg: #08111f;
+      --bg-2: #0c1830;
+      --panel: rgba(12, 24, 48, 0.88);
+      --panel-2: rgba(17, 34, 64, 0.92);
       --line: rgba(255,255,255,.08);
       --text: #eef4ff;
-      --muted: #a6bad7;
-      --blue: #51b8ff;
-      --purple: #8a6dff;
-      --green: #39d98a;
-      --amber: #ffbc42;
-      --shadow: 0 18px 48px rgba(0,0,0,.28);
+      --muted: #9fb3d1;
+      --blue: #54c2ff;
+      --green: #35d48c;
+      --amber: #ffbf47;
+      --purple: #8d73ff;
+      --shadow: 0 18px 50px rgba(0,0,0,.28);
+      --radius: 18px;
     }
     * { box-sizing: border-box; }
-    body { margin: 0; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: linear-gradient(180deg, #07111f 0%, #0b1730 45%, #07111f 100%); color: var(--text); }
-    .top { position: sticky; top: 0; z-index: 30; backdrop-filter: blur(12px); background: rgba(7,17,31,.84); border-bottom: 1px solid rgba(255,255,255,.06); }
-    .top-inner { max-width: 1280px; margin: 0 auto; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
-    .title { font-size: 16px; font-weight: 700; }
-    .sub { color: var(--muted); font-size: 12px; margin-top: 2px; }
-    .actions { display: flex; gap: 8px; flex-wrap: wrap; }
-    .btn { text-decoration: none; color: white; padding: 10px 12px; border-radius: 10px; font-size: 13px; font-weight: 700; background: linear-gradient(135deg, #1d4ed8, #2563eb); white-space: nowrap; }
-    .btn.alt { background: rgba(255,255,255,.05); border: 1px solid var(--line); color: var(--text); }
-    .wrap { max-width: 1280px; margin: 0 auto; padding: 18px 16px 48px; }
-    .hero { border: 1px solid var(--line); background: linear-gradient(180deg, rgba(17,37,63,.95), rgba(11,23,48,.92)); border-radius: 20px; padding: 22px; box-shadow: var(--shadow); margin-bottom: 16px; }
-    h1 { margin: 0 0 8px; font-size: clamp(28px, 4vw, 42px); line-height: 1.05; }
-    .hero p { margin: 0; max-width: 900px; color: var(--muted); line-height: 1.6; font-size: 15px; }
-    .chips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
-    .chip { padding: 8px 10px; border-radius: 999px; font-size: 12px; background: rgba(255,255,255,.05); border: 1px solid var(--line); color: #dce9ff; }
-    .section { margin-top: 16px; border: 1px solid var(--line); background: rgba(13,27,46,.88); border-radius: 18px; box-shadow: var(--shadow); overflow: hidden; }
-    .section-header { padding: 16px 18px; border-bottom: 1px solid var(--line); background: rgba(255,255,255,.03); }
-    .section-header h2 { margin: 0 0 4px; font-size: 18px; }
-    .section-header p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.5; }
-    .section-body { padding: 18px; }
-    .org-level { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; margin-bottom: 14px; }
-    .card { min-width: 220px; max-width: 100%; background: linear-gradient(180deg, rgba(17,37,63,1), rgba(12,25,45,.98)); border: 1px solid var(--line); border-radius: 16px; padding: 16px; box-shadow: 0 10px 28px rgba(0,0,0,.18); }
-    .card h3 { margin: 0 0 6px; font-size: 17px; line-height: 1.2; }
-    .role { display: inline-block; margin-bottom: 10px; padding: 6px 9px; border-radius: 999px; font-size: 11px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; background: rgba(81,184,255,.12); color: #c8e9ff; border: 1px solid rgba(81,184,255,.18); }
-    .card ul { margin: 0; padding-left: 18px; color: var(--muted); line-height: 1.5; font-size: 14px; }
-    .connector { text-align: center; color: #6f8ab1; font-size: 22px; margin: -2px 0 10px; }
-    .grid-2, .grid-3, .grid-4 { display: grid; gap: 14px; }
-    .grid-2 { grid-template-columns: repeat(2, minmax(0,1fr)); }
-    .grid-3 { grid-template-columns: repeat(3, minmax(0,1fr)); }
-    .grid-4 { grid-template-columns: repeat(4, minmax(0,1fr)); }
-    .phase { position: relative; padding: 16px; border-radius: 16px; border: 1px solid var(--line); background: linear-gradient(180deg, rgba(17,37,63,.98), rgba(10,21,39,.98)); }
-    .phase-num { display: inline-flex; width: 32px; height: 32px; border-radius: 999px; align-items: center; justify-content: center; font-weight: 800; margin-bottom: 10px; background: rgba(81,184,255,.12); color: #d6edff; border: 1px solid rgba(81,184,255,.2); }
-    .phase h3 { margin: 0 0 8px; font-size: 17px; }
-    .phase p { margin: 0 0 10px; color: var(--muted); font-size: 14px; line-height: 1.55; }
-    .phase ul { margin: 0; padding-left: 18px; color: var(--muted); font-size: 14px; line-height: 1.5; }
-    .tag { display: inline-block; margin-top: 10px; padding: 6px 9px; border-radius: 999px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; }
-    .tag.now { background: rgba(57,217,138,.12); color: #bff3d8; border: 1px solid rgba(57,217,138,.22); }
-    .tag.next { background: rgba(255,188,66,.12); color: #ffe0a1; border: 1px solid rgba(255,188,66,.22); }
-    .tag.later { background: rgba(138,109,255,.14); color: #ddd4ff; border: 1px solid rgba(138,109,255,.22); }
-    .legend { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 12px; }
-    .legend .card { min-width: 0; }
-    .small { font-size: 13px; color: var(--muted); line-height: 1.55; }
-    @media (max-width: 980px) { .grid-4, .grid-3, .grid-2, .legend { grid-template-columns: 1fr; } }
-    @media (max-width: 700px) { .top-inner { flex-direction: column; align-items: flex-start; } .actions { width: 100%; } .btn { flex: 1 1 auto; text-align: center; } .section-body, .section-header, .hero { padding: 16px; } .card { min-width: 0; } }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(84,194,255,.10), transparent 24%),
+        radial-gradient(circle at top right, rgba(141,115,255,.10), transparent 24%),
+        linear-gradient(180deg, var(--bg), var(--bg-2));
+      overflow: hidden;
+    }
+    .app {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      height: 100vh;
+    }
+    .sidebar {
+      border-right: 1px solid var(--line);
+      background: rgba(6, 14, 28, 0.72);
+      backdrop-filter: blur(14px);
+      padding: 18px;
+      overflow-y: auto;
+    }
+    .brand {
+      margin-bottom: 18px;
+    }
+    .brand h1 {
+      margin: 0 0 6px;
+      font-size: 24px;
+      line-height: 1.05;
+    }
+    .brand p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .group { margin-bottom: 18px; }
+    .label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: #7f97bb;
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+    .view-list, .toggle-list {
+      display: grid;
+      gap: 8px;
+    }
+    .view-btn, .toggle-btn {
+      width: 100%;
+      text-align: left;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.03);
+      color: var(--text);
+      border-radius: 14px;
+      padding: 12px 14px;
+      cursor: pointer;
+      font: inherit;
+      transition: .18s ease;
+    }
+    .view-btn:hover, .toggle-btn:hover { border-color: rgba(84,194,255,.3); transform: translateY(-1px); }
+    .view-btn.active {
+      background: linear-gradient(180deg, rgba(84,194,255,.16), rgba(84,194,255,.08));
+      border-color: rgba(84,194,255,.35);
+    }
+    .mini {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 4px;
+      line-height: 1.4;
+    }
+    .notes {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.03);
+      border-radius: 16px;
+      padding: 14px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+    .main {
+      display: grid;
+      grid-template-rows: auto 1fr;
+      min-width: 0;
+    }
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(7, 15, 30, 0.58);
+      backdrop-filter: blur(10px);
+    }
+    .toolbar-left h2 {
+      margin: 0 0 4px;
+      font-size: 20px;
+    }
+    .toolbar-left p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .toolbar-right {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .tool-btn {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      color: var(--text);
+      border-radius: 12px;
+      padding: 10px 12px;
+      cursor: pointer;
+      font: inherit;
+    }
+    .canvas-wrap {
+      position: relative;
+      overflow: hidden;
+      min-height: 0;
+    }
+    .canvas {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      cursor: grab;
+      background-image:
+        linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
+      background-size: 42px 42px;
+    }
+    .canvas.dragging { cursor: grabbing; }
+    .viewport {
+      position: absolute;
+      left: 0;
+      top: 0;
+      transform-origin: 0 0;
+      width: 1800px;
+      min-height: 1200px;
+      padding: 36px;
+    }
+    .flow {
+      display: none;
+      gap: 18px;
+      align-content: start;
+    }
+    .flow.active { display: grid; }
+    .flow.human { grid-template-columns: 1fr; }
+    .center-row {
+      display: flex;
+      justify-content: center;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+    .row {
+      display: grid;
+      gap: 18px;
+    }
+    .row.two { grid-template-columns: repeat(2, minmax(280px, 1fr)); }
+    .row.three { grid-template-columns: repeat(3, minmax(260px, 1fr)); }
+    .row.four { grid-template-columns: repeat(4, minmax(250px, 1fr)); }
+    .arrow {
+      text-align: center;
+      color: #6f8db6;
+      font-size: 26px;
+      line-height: 1;
+    }
+    .node {
+      background: linear-gradient(180deg, rgba(17,34,64,.96), rgba(10,21,40,.98));
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 16px;
+      box-shadow: var(--shadow);
+      min-width: 0;
+    }
+    .node.highlight { border-color: rgba(84,194,255,.35); box-shadow: 0 20px 60px rgba(84,194,255,.10); }
+    .pill {
+      display: inline-block;
+      margin-bottom: 10px;
+      padding: 6px 9px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      background: rgba(84,194,255,.12);
+      color: #cdeeff;
+      border: 1px solid rgba(84,194,255,.22);
+    }
+    .node h3 {
+      margin: 0 0 8px;
+      font-size: 20px;
+      line-height: 1.1;
+    }
+    .node p {
+      margin: 0 0 10px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+    .node ul {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+    .node.collapsed ul, .node.collapsed p.extra { display: none; }
+    .node-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      gap: 12px;
+    }
+    .collapse {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      color: var(--text);
+      border-radius: 10px;
+      padding: 7px 9px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    .phase-node .pill { background: rgba(255,191,71,.12); border-color: rgba(255,191,71,.22); color: #ffe7b3; }
+    .phase-now .pill { background: rgba(53,212,140,.12); border-color: rgba(53,212,140,.22); color: #c7f5dd; }
+    .phase-later .pill { background: rgba(141,115,255,.14); border-color: rgba(141,115,255,.22); color: #ddd3ff; }
+    .legend-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-right: 8px;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .dot { width: 10px; height: 10px; border-radius: 999px; display: inline-block; }
+    .dot.blue { background: var(--blue); }
+    .dot.green { background: var(--green); }
+    .dot.amber { background: var(--amber); }
+    .dot.purple { background: var(--purple); }
+    @media (max-width: 980px) {
+      .app { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
+      .sidebar { max-height: 40vh; border-right: 0; border-bottom: 1px solid var(--line); }
+      .row.two, .row.three, .row.four { grid-template-columns: 1fr; }
+      .viewport { width: 1200px; }
+    }
   </style>
 </head>
 <body>
-  <div class="top">
-    <div class="top-inner">
-      <div>
-        <div class="title">Futures Funding + Claw Vision Map</div>
-        <div class="sub">Human org chart + Claw under Ryan + phased build order</div>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <h1>Interactive Org Map</h1>
+        <p>Zoom, pan, switch views, and collapse nodes so this actually feels usable instead of cluttered.</p>
       </div>
-      <div class="actions">
-        <a class="btn" href="#vision">View Vision</a>
-        <a class="btn alt" href="#roadmap">Agent Roadmap</a>
+
+      <div class="group">
+        <div class="label">Views</div>
+        <div class="view-list">
+          <button class="view-btn active" data-view="human">Human Org<span class="mini">James → Ryan / Deric → Page + reps</span></button>
+          <button class="view-btn" data-view="ops">Ryan Ops Lane<span class="mini">Ryan with Page, Max, Kate, and support bots</span></button>
+          <button class="view-btn" data-view="claw">Claw Stack<span class="mini">How Max organizes the agent layer</span></button>
+          <button class="view-btn" data-view="roadmap">Build Roadmap<span class="mini">Which agent to perfect/build one by one</span></button>
+        </div>
       </div>
-    </div>
+
+      <div class="group">
+        <div class="label">Canvas</div>
+        <div class="toggle-list">
+          <button class="toggle-btn" id="fitBtn">Fit to Screen</button>
+          <button class="toggle-btn" id="expandBtn">Expand All</button>
+          <button class="toggle-btn" id="collapseBtn">Collapse All</button>
+        </div>
+      </div>
+
+      <div class="group notes">
+        <strong style="color:var(--text); display:block; margin-bottom:8px;">Best way to use this</strong>
+        Start with Human Org. Then switch to Ryan Ops Lane. Then open Claw Stack. Use the roadmap last so build order is easier to read.
+        <div style="margin-top:12px;">
+          <span class="legend-chip"><span class="dot blue"></span>human/org</span>
+          <span class="legend-chip"><span class="dot green"></span>built now</span>
+          <span class="legend-chip"><span class="dot amber"></span>next</span>
+          <span class="legend-chip"><span class="dot purple"></span>later</span>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="toolbar">
+        <div class="toolbar-left">
+          <h2 id="viewTitle">Human Org</h2>
+          <p id="viewDesc">The real company structure first.</p>
+        </div>
+        <div class="toolbar-right">
+          <button class="tool-btn" id="zoomOut">− Zoom</button>
+          <button class="tool-btn" id="zoomIn">+ Zoom</button>
+          <button class="tool-btn" id="resetBtn">Reset</button>
+        </div>
+      </div>
+
+      <div class="canvas-wrap">
+        <div class="canvas" id="canvas">
+          <div class="viewport" id="viewport">
+
+            <section class="flow human active" data-flow="human">
+              <div class="center-row">
+                <article class="node highlight">
+                  <span class="pill">Top of company</span>
+                  <div class="node-head"><h3>James</h3><button class="collapse">Collapse</button></div>
+                  <p>CEO. Ryan and Deric both report here.</p>
+                  <ul><li>Top executive seat</li><li>Company-level direction</li></ul>
+                </article>
+              </div>
+              <div class="arrow">↓</div>
+              <div class="row two">
+                <article class="node highlight">
+                  <span class="pill">Operations</span>
+                  <div class="node-head"><h3>Ryan</h3><button class="collapse">Collapse</button></div>
+                  <p>VP of Ops. Ryan’s lane contains Page plus Max and the Claw support stack.</p>
+                  <ul><li>Operational execution</li><li>Systems and visibility</li><li>Major business bottlenecks</li></ul>
+                </article>
+                <article class="node">
+                  <span class="pill">Sales</span>
+                  <div class="node-head"><h3>Deric</h3><button class="collapse">Collapse</button></div>
+                  <p>VP of Sales. Owns the rep org.</p>
+                  <ul><li>Sales-side execution</li><li>Rep management</li><li>Future rep expansion</li></ul>
+                </article>
+              </div>
+              <div class="arrow">↓</div>
+              <div class="row two">
+                <article class="node">
+                  <span class="pill">Ryan's lane</span>
+                  <div class="node-head"><h3>Page + Max + Claw</h3><button class="collapse">Collapse</button></div>
+                  <p>Under Ryan sit the human processing function and the Claw support layer.</p>
+                  <ul><li>Page = processor</li><li>Max = CEO of Claw, under Ryan’s lane</li><li>Bots support Ryan’s ops org</li></ul>
+                </article>
+                <article class="node">
+                  <span class="pill">Current reps</span>
+                  <div class="node-head"><h3>Deric’s team</h3><button class="collapse">Collapse</button></div>
+                  <p>Nate, Morgan, Jayson, Mark, Brendon, Derek.</p>
+                  <ul><li>More reps planned later</li></ul>
+                </article>
+              </div>
+            </section>
+
+            <section class="flow ops" data-flow="ops">
+              <div class="center-row">
+                <article class="node highlight">
+                  <span class="pill">Ops leader</span>
+                  <div class="node-head"><h3>Ryan</h3><button class="collapse">Collapse</button></div>
+                  <p>VP of Ops. This is the lane where the company gains leverage from Page plus Max and the bots.</p>
+                  <ul><li>Processing pressure point</li><li>Revenue visibility pressure point</li><li>System ownership lane</li></ul>
+                </article>
+              </div>
+              <div class="arrow">↓</div>
+              <div class="row two">
+                <article class="node">
+                  <span class="pill">Human execution</span>
+                  <div class="node-head"><h3>Page</h3><button class="collapse">Collapse</button></div>
+                  <p>Processor. In charge of processing files.</p>
+                  <ul><li>Main goal: make her faster</li><li>Reduce file friction</li><li>Improve checklist/follow-up flow</li></ul>
+                </article>
+                <article class="node highlight">
+                  <span class="pill">Claw executive layer</span>
+                  <div class="node-head"><h3>Max</h3><button class="collapse">Collapse</button></div>
+                  <p>CEO of Claw, sitting under Ryan’s lane and organizing the bot/agent support system.</p>
+                  <ul><li>Coordinates agent stack</li><li>Creates visibility and automation</li><li>Supports Ryan and Page</li></ul>
+                </article>
+              </div>
+              <div class="arrow">↓</div>
+              <div class="row four">
+                <article class="node phase-node phase-now">
+                  <span class="pill">Built now</span>
+                  <div class="node-head"><h3>Kate</h3><button class="collapse">Collapse</button></div>
+                  <p>Existing processing-support agent.</p>
+                  <ul><li>Make Page’s life easier</li><li>Workflow support</li><li>Blocker visibility</li></ul>
+                </article>
+                <article class="node phase-node">
+                  <span class="pill">Next</span>
+                  <div class="node-head"><h3>Revenue Agent</h3><button class="collapse">Collapse</button></div>
+                  <p>Lead quality + ad/channel visibility.</p>
+                  <ul><li>Source scoring</li><li>Lead quality feedback loop</li><li>In-house ad intelligence</li></ul>
+                </article>
+                <article class="node phase-node">
+                  <span class="pill">After</span>
+                  <div class="node-head"><h3>Rep Oversight</h3><button class="collapse">Collapse</button></div>
+                  <p>Rep hygiene and follow-up visibility.</p>
+                  <ul><li>Stale lead alerts</li><li>Activity scoreboards</li><li>Manager reporting</li></ul>
+                </article>
+                <article class="node phase-node phase-later">
+                  <span class="pill">Later</span>
+                  <div class="node-head"><h3>Lender + FlipLabs</h3><button class="collapse">Collapse</button></div>
+                  <p>Guideline support first, FlipLabs ops later.</p>
+                  <ul><li>Lender desk</li><li>Course/student support</li><li>GHL workflow layer</li></ul>
+                </article>
+              </div>
+            </section>
+
+            <section class="flow claw" data-flow="claw">
+              <div class="center-row">
+                <article class="node highlight">
+                  <span class="pill">Claw</span>
+                  <div class="node-head"><h3>Max</h3><button class="collapse">Collapse</button></div>
+                  <p>CEO of Claw. Agent-side executive/operator, but still sitting inside Ryan’s company lane.</p>
+                  <ul><li>Not above Ryan</li><li>Supports Ryan’s org</li><li>Builds and runs the bot stack</li></ul>
+                </article>
+              </div>
+              <div class="arrow">↓</div>
+              <div class="row three">
+                <article class="node phase-node phase-now">
+                  <span class="pill">Built</span>
+                  <div class="node-head"><h3>Kate</h3><button class="collapse">Collapse</button></div>
+                  <p>Processing support.</p>
+                  <ul><li>Page-facing leverage</li><li>File workflow support</li></ul>
+                </article>
+                <article class="node">
+                  <span class="pill">Next stack</span>
+                  <div class="node-head"><h3>Revenue + Rep Agents</h3><button class="collapse">Collapse</button></div>
+                  <p>The next two major Claw seats.</p>
+                  <ul><li>Lead quality</li><li>Ad intelligence</li><li>Rep activity oversight</li></ul>
+                </article>
+                <article class="node phase-node phase-later">
+                  <span class="pill">Later stack</span>
+                  <div class="node-head"><h3>Lender + FlipLabs + Roll-up</h3><button class="collapse">Collapse</button></div>
+                  <p>Specialized support layers once core lanes are tighter.</p>
+                  <ul><li>Lender guideline engine</li><li>FlipLabs ops support</li><li>Executive dashboard layer</li></ul>
+                </article>
+              </div>
+            </section>
+
+            <section class="flow roadmap" data-flow="roadmap">
+              <div class="row three">
+                <article class="node phase-node phase-now">
+                  <span class="pill">Phase 1</span>
+                  <div class="node-head"><h3>Perfect Kate</h3><button class="collapse">Collapse</button></div>
+                  <p>Kate already exists. Tighten her around Page’s processing lane first.</p>
+                  <ul><li>Checklist clarity</li><li>Borrower/rep follow-up</li><li>Blocker visibility</li></ul>
+                </article>
+                <article class="node phase-node">
+                  <span class="pill">Phase 2</span>
+                  <div class="node-head"><h3>Revenue / Lead Quality Agent</h3><button class="collapse">Collapse</button></div>
+                  <p>Weak leads are one of the biggest business problems.</p>
+                  <ul><li>Score lead quality</li><li>Track ad/channel output</li><li>Support in-house media control</li></ul>
+                </article>
+                <article class="node phase-node">
+                  <span class="pill">Phase 3</span>
+                  <div class="node-head"><h3>Rep Oversight Agent</h3><button class="collapse">Collapse</button></div>
+                  <p>Make rep activity visible without manual babysitting.</p>
+                  <ul><li>Pipeline hygiene</li><li>Missed follow-up alerts</li><li>Manager scoreboards</li></ul>
+                </article>
+                <article class="node phase-node phase-later">
+                  <span class="pill">Phase 4</span>
+                  <div class="node-head"><h3>Lender Desk Agent</h3><button class="collapse">Collapse</button></div>
+                  <p>Centralize overlays, guidelines, and fit logic.</p>
+                  <ul><li>Lender knowledge base</li><li>Placement support</li></ul>
+                </article>
+                <article class="node phase-node phase-later">
+                  <span class="pill">Phase 5</span>
+                  <div class="node-head"><h3>FlipLabs Ops Agent</h3><button class="collapse">Collapse</button></div>
+                  <p>Build once core lending-side stack is stable.</p>
+                  <ul><li>12-week course support</li><li>GHL subaccount workflows</li><li>Student reminders</li></ul>
+                </article>
+                <article class="node phase-node phase-later">
+                  <span class="pill">Phase 6</span>
+                  <div class="node-head"><h3>Executive Roll-Up Layer</h3><button class="collapse">Collapse</button></div>
+                  <p>One dashboard view across the whole stack.</p>
+                  <ul><li>Daily / weekly summaries</li><li>Cross-agent alerting</li><li>Decision support for Ryan</li></ul>
+                </article>
+              </div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+    </main>
   </div>
 
-  <main class="wrap">
-    <section class="hero" id="vision">
-      <h1>Main Vision: Ryan’s lane includes Page, Max, and the bots</h1>
-      <p>This version puts the structure where you wanted it: James at the top, Ryan and Deric under James, and inside Ryan’s lane sit Page plus Max and the Claw systems/bots. That keeps the human company org real while showing how Claw supports operations under Ryan.</p>
-      <div class="chips">
-        <span class="chip">James = CEO</span>
-        <span class="chip">Ryan = VP of Ops</span>
-        <span class="chip">Deric = VP of Sales</span>
-        <span class="chip">Page under Ryan</span>
-        <span class="chip">Max + bots under Ryan</span>
-      </div>
-    </section>
+  <script>
+    const views = {
+      human: { title: 'Human Org', desc: 'The real company structure first.' },
+      ops: { title: 'Ryan Ops Lane', desc: 'Page, Max, and the support stack under Ryan.' },
+      claw: { title: 'Claw Stack', desc: 'How Max organizes the agent layer under Ryan.' },
+      roadmap: { title: 'Build Roadmap', desc: 'Perfect/build one agent at a time.' },
+    };
 
-    <section class="section">
-      <div class="section-header">
-        <h2>1) Real Human Org Chart</h2>
-        <p>This is the actual company structure with Ryan’s full operations lane under him.</p>
-      </div>
-      <div class="section-body">
-        <div class="org-level">
-          <div class="card">
-            <div class="role">Top of company</div>
-            <h3>James</h3>
-            <ul>
-              <li>CEO</li>
-              <li>Top executive seat</li>
-              <li>Ryan and Deric both report here</li>
-            </ul>
-          </div>
-        </div>
-        <div class="connector">↓</div>
-        <div class="grid-2">
-          <div class="card">
-            <div class="role">Operations</div>
-            <h3>Ryan</h3>
-            <ul>
-              <li>VP of Ops</li>
-              <li>Owns operational execution, systems, visibility, and business bottlenecks</li>
-              <li>Page, Max, and Claw-side bots sit inside Ryan’s lane</li>
-            </ul>
-          </div>
-          <div class="card">
-            <div class="role">Sales</div>
-            <h3>Deric</h3>
-            <ul>
-              <li>VP of Sales</li>
-              <li>Owns rep org and sales-side execution</li>
-              <li>Future reps expand under this lane</li>
-            </ul>
-          </div>
-        </div>
-        <div class="connector">↓</div>
-        <div class="grid-2">
-          <div class="card">
-            <div class="role">Ryan’s direct lane</div>
-            <h3>Page + Max + Claw</h3>
-            <ul>
-              <li>Page = processor</li>
-              <li>Max = Claw executive/operator inside Ryan’s org lane</li>
-              <li>All Claw bots/agents support Ryan’s operation from here</li>
-            </ul>
-          </div>
-          <div class="card">
-            <div class="role">Sales team</div>
-            <h3>Current reps under Deric</h3>
-            <ul>
-              <li>Nate</li>
-              <li>Morgan</li>
-              <li>Jayson</li>
-              <li>Mark</li>
-              <li>Brendon</li>
-              <li>Derek</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
+    const canvas = document.getElementById('canvas');
+    const viewport = document.getElementById('viewport');
+    const title = document.getElementById('viewTitle');
+    const desc = document.getElementById('viewDesc');
+    const flows = [...document.querySelectorAll('.flow')];
+    const viewButtons = [...document.querySelectorAll('.view-btn')];
+    const collapseButtons = [...document.querySelectorAll('.collapse')];
 
-    <section class="section">
-      <div class="section-header">
-        <h2>2) Ryan’s Ops Lane: Page + Max + Bots</h2>
-        <p>This breaks out the part of the org that lives under Ryan and shows how Claw fits underneath him.</p>
-      </div>
-      <div class="section-body">
-        <div class="org-level">
-          <div class="card">
-            <div class="role">Ops leader</div>
-            <h3>Ryan</h3>
-            <ul>
-              <li>VP of Ops</li>
-              <li>Owns the lane where processing, systems, visibility, and future ops leverage live</li>
-            </ul>
-          </div>
-        </div>
-        <div class="connector">↓</div>
-        <div class="grid-2">
-          <div class="card">
-            <div class="role">Processing</div>
-            <h3>Page</h3>
-            <ul>
-              <li>Processor</li>
-              <li>In charge of processing files</li>
-              <li>Main goal: remove friction and make her faster</li>
-            </ul>
-          </div>
-          <div class="card">
-            <div class="role">Claw executive layer</div>
-            <h3>Max</h3>
-            <ul>
-              <li>CEO of Claw</li>
-              <li>Runs the agent/bot layer that supports Ryan’s lane</li>
-              <li>Builds visibility, automation, and support systems around the operation</li>
-            </ul>
-          </div>
-        </div>
-        <div class="connector">↓</div>
-        <div class="grid-4">
-          <div class="card">
-            <div class="role">Built</div>
-            <h3>Kate</h3>
-            <ul>
-              <li>Processing support already built</li>
-              <li>Designed to make Page’s life easier</li>
-            </ul>
-          </div>
-          <div class="card">
-            <div class="role">Next</div>
-            <h3>Revenue / Lead Quality Agent</h3>
-            <ul>
-              <li>Monitor lead quality</li>
-              <li>Track ad/channel performance</li>
-            </ul>
-          </div>
-          <div class="card">
-            <div class="role">After</div>
-            <h3>Rep Oversight Agent</h3>
-            <ul>
-              <li>Monitor rep activity</li>
-              <li>Improve pipeline hygiene</li>
-            </ul>
-          </div>
-          <div class="card">
-            <div class="role">Later</div>
-            <h3>Lender + FlipLabs Agents</h3>
-            <ul>
-              <li>Lender desk / guidelines support</li>
-              <li>FlipLabs ops support later</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
+    let scale = 0.82;
+    let x = 40;
+    let y = 20;
+    let dragging = false;
+    let startX = 0;
+    let startY = 0;
 
-    <section class="section" id="roadmap">
-      <div class="section-header">
-        <h2>3) Clear Agent Build Path</h2>
-        <p>Build one sub-agent at a time and perfect each one before moving down the list.</p>
-      </div>
-      <div class="section-body">
-        <div class="grid-4">
-          <div class="phase">
-            <div class="phase-num">1</div>
-            <h3>Perfect Kate</h3>
-            <p>Kate already exists. Tighten her around Page’s workflow until processing friction drops materially.</p>
-            <ul>
-              <li>Checklist clarity</li>
-              <li>Borrower / rep follow-up</li>
-              <li>Blocker visibility</li>
-            </ul>
-            <div class="tag now">Perfect now</div>
-          </div>
-          <div class="phase">
-            <div class="phase-num">2</div>
-            <h3>Revenue / Lead Quality Agent</h3>
-            <p>Next build because weak leads are a major business problem and Ryan wants more ad intelligence owned internally.</p>
-            <ul>
-              <li>Score lead quality by source</li>
-              <li>Track ad/channel quality</li>
-              <li>Support in-house ad execution</li>
-            </ul>
-            <div class="tag next">Build next</div>
-          </div>
-          <div class="phase">
-            <div class="phase-num">3</div>
-            <h3>Rep Oversight Agent</h3>
-            <p>Give Ryan and Deric a clearer read on sales discipline, stale leads, follow-up gaps, and pipeline hygiene.</p>
-            <ul>
-              <li>Rep activity monitoring</li>
-              <li>Scoreboards / alerts</li>
-              <li>Manager visibility</li>
-            </ul>
-            <div class="tag next">After revenue</div>
-          </div>
-          <div class="phase">
-            <div class="phase-num">4</div>
-            <h3>Lender Desk Agent</h3>
-            <p>Centralize lender guidelines and overlays once revenue + rep visibility are tighter.</p>
-            <ul>
-              <li>Lender fit logic</li>
-              <li>Guideline management</li>
-              <li>Placement support</li>
-            </ul>
-            <div class="tag later">Later</div>
-          </div>
-        </div>
-        <div class="grid-2" style="margin-top:14px;">
-          <div class="phase">
-            <div class="phase-num">5</div>
-            <h3>FlipLabs Ops Agent</h3>
-            <p>Once lending-side support is tighter, build the simpler support stack for the 12-week flipping course and its GHL subaccount.</p>
-            <ul>
-              <li>Course intake</li>
-              <li>Student reminders</li>
-              <li>Progress + support workflows</li>
-            </ul>
-            <div class="tag later">Future line</div>
-          </div>
-          <div class="phase">
-            <div class="phase-num">6</div>
-            <h3>Executive Roll-Up Layer</h3>
-            <p>Once multiple agents are stable, Max consolidates everything into one executive dashboard and alerting layer for Ryan.</p>
-            <ul>
-              <li>Daily/weekly reporting</li>
-              <li>Cross-agent summaries</li>
-              <li>One clear operating view</li>
-            </ul>
-            <div class="tag later">Scale layer</div>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
+    function applyTransform() {
+      viewport.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
+    }
+
+    function setView(name) {
+      flows.forEach(f => f.classList.toggle('active', f.dataset.flow === name));
+      viewButtons.forEach(b => b.classList.toggle('active', b.dataset.view === name));
+      title.textContent = views[name].title;
+      desc.textContent = views[name].desc;
+      fitToScreen();
+    }
+
+    function fitToScreen() {
+      const active = document.querySelector('.flow.active');
+      if (!active) return;
+      const wrapW = canvas.clientWidth;
+      const wrapH = canvas.clientHeight;
+      const contentW = active.scrollWidth + 80;
+      const contentH = active.scrollHeight + 80;
+      const fitScale = Math.min(wrapW / contentW, wrapH / contentH, 1);
+      scale = Math.max(0.55, fitScale);
+      x = Math.max(10, (wrapW - contentW * scale) / 2);
+      y = 24;
+      applyTransform();
+    }
+
+    viewButtons.forEach(btn => btn.addEventListener('click', () => setView(btn.dataset.view)));
+    document.getElementById('fitBtn').addEventListener('click', fitToScreen);
+    document.getElementById('resetBtn').addEventListener('click', fitToScreen);
+    document.getElementById('zoomIn').addEventListener('click', () => { scale = Math.min(1.8, scale + 0.12); applyTransform(); });
+    document.getElementById('zoomOut').addEventListener('click', () => { scale = Math.max(0.45, scale - 0.12); applyTransform(); });
+    document.getElementById('expandBtn').addEventListener('click', () => {
+      document.querySelectorAll('.node').forEach(n => n.classList.remove('collapsed'));
+      document.querySelectorAll('.collapse').forEach(b => b.textContent = 'Collapse');
+      setTimeout(fitToScreen, 50);
+    });
+    document.getElementById('collapseBtn').addEventListener('click', () => {
+      document.querySelectorAll('.node').forEach(n => n.classList.add('collapsed'));
+      document.querySelectorAll('.collapse').forEach(b => b.textContent = 'Expand');
+      setTimeout(fitToScreen, 50);
+    });
+
+    collapseButtons.forEach(btn => btn.addEventListener('click', (e) => {
+      const node = e.target.closest('.node');
+      node.classList.toggle('collapsed');
+      e.target.textContent = node.classList.contains('collapsed') ? 'Expand' : 'Collapse';
+      setTimeout(fitToScreen, 50);
+    }));
+
+    canvas.addEventListener('mousedown', (e) => {
+      dragging = true;
+      canvas.classList.add('dragging');
+      startX = e.clientX - x;
+      startY = e.clientY - y;
+    });
+    window.addEventListener('mousemove', (e) => {
+      if (!dragging) return;
+      x = e.clientX - startX;
+      y = e.clientY - startY;
+      applyTransform();
+    });
+    window.addEventListener('mouseup', () => { dragging = false; canvas.classList.remove('dragging'); });
+
+    canvas.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      const delta = e.deltaY > 0 ? -0.08 : 0.08;
+      scale = Math.min(2, Math.max(0.45, scale + delta));
+      applyTransform();
+    }, { passive: false });
+
+    window.addEventListener('resize', fitToScreen);
+    setTimeout(fitToScreen, 80);
+  </script>
 </body>
 </html>
