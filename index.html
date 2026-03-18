@@ -267,6 +267,43 @@
     .dot.green { background: var(--green); }
     .dot.amber { background: var(--amber); }
     .dot.purple { background: var(--purple); }
+
+    .mobile-app { display: none; }
+    .mobile-top {
+      position: sticky; top: 0; z-index: 40;
+      background: rgba(7,17,31,.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--line);
+      padding: 14px 14px 12px;
+    }
+    .mobile-top h1 { margin: 0 0 4px; font-size: 20px; line-height: 1.1; }
+    .mobile-top p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.45; }
+    .mobile-tabs {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;
+      margin-top: 12px;
+    }
+    .mobile-tab {
+      border: 1px solid var(--line); background: rgba(255,255,255,.04); color: var(--text);
+      border-radius: 12px; padding: 10px 12px; font: inherit; font-size: 13px; font-weight: 700;
+    }
+    .mobile-tab.active { background: rgba(84,194,255,.14); border-color: rgba(84,194,255,.32); }
+    .mobile-body { padding: 14px; display: grid; gap: 12px; }
+    .mobile-view { display: none; gap: 12px; }
+    .mobile-view.active { display: grid; }
+    .mobile-card {
+      background: linear-gradient(180deg, rgba(17,34,64,.96), rgba(10,21,40,.98));
+      border: 1px solid var(--line); border-radius: 16px; padding: 14px; box-shadow: var(--shadow);
+    }
+    .mobile-card h3 { margin: 0 0 8px; font-size: 18px; line-height: 1.15; }
+    .mobile-card p { margin: 0 0 10px; color: var(--muted); font-size: 14px; line-height: 1.5; }
+    .mobile-card ul { margin: 0; padding-left: 18px; color: var(--muted); font-size: 14px; line-height: 1.5; }
+    .mobile-pill {
+      display: inline-block; margin-bottom: 10px; padding: 6px 9px; border-radius: 999px;
+      font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em;
+      background: rgba(84,194,255,.12); color: #cdeeff; border: 1px solid rgba(84,194,255,.22);
+    }
+    .mobile-stack-arrow { text-align: center; color: #6f8db6; font-size: 22px; }
+
     @media (max-width: 980px) {
       .app { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
       .sidebar { max-height: 40vh; border-right: 0; border-bottom: 1px solid var(--line); }
@@ -276,6 +313,48 @@
   </style>
 </head>
 <body>
+  <div class="mobile-app">
+    <div class="mobile-top">
+      <h1>Org Map — Mobile</h1>
+      <p>A cleaner phone view for the org and agent roadmap.</p>
+      <div class="mobile-tabs">
+        <button class="mobile-tab active" data-mobile-view="m-human">Human Org</button>
+        <button class="mobile-tab" data-mobile-view="m-ops">Ryan Ops</button>
+        <button class="mobile-tab" data-mobile-view="m-claw">Claw Stack</button>
+        <button class="mobile-tab" data-mobile-view="m-roadmap">Roadmap</button>
+      </div>
+    </div>
+    <div class="mobile-body">
+      <section class="mobile-view active" data-mobile-section="m-human">
+        <article class="mobile-card"><span class="mobile-pill">Top of company</span><h3>James</h3><p>CEO. Ryan and Deric both report here.</p></article>
+        <div class="mobile-stack-arrow">↓</div>
+        <article class="mobile-card"><span class="mobile-pill">Operations</span><h3>Ryan</h3><p>VP of Ops. Page, Max, and the bots sit in Ryan’s lane.</p></article>
+        <article class="mobile-card"><span class="mobile-pill">Sales</span><h3>Deric</h3><p>VP of Sales. Owns the rep org.</p><ul><li>Nate</li><li>Morgan</li><li>Jayson</li><li>Mark</li><li>Brendon</li><li>Derek</li></ul></article>
+        <article class="mobile-card"><span class="mobile-pill">Ryan's lane</span><h3>Page + Max + Claw</h3><p>Processing plus the Claw support stack all sit under Ryan.</p></article>
+      </section>
+      <section class="mobile-view" data-mobile-section="m-ops">
+        <article class="mobile-card"><span class="mobile-pill">Processing</span><h3>Page</h3><p>Processor. In charge of processing files.</p></article>
+        <article class="mobile-card"><span class="mobile-pill">Claw executive layer</span><h3>Max</h3><p>CEO of Claw under Ryan’s lane, organizing the support bots.</p></article>
+        <article class="mobile-card"><span class="mobile-pill">Built now</span><h3>Kate</h3><p>Existing processing support agent built to make Page’s life easier.</p></article>
+      </section>
+      <section class="mobile-view" data-mobile-section="m-claw">
+        <article class="mobile-card"><span class="mobile-pill">Top of Claw</span><h3>Max</h3><p>CEO of Claw. Top of the agent-side org chart.</p></article>
+        <article class="mobile-card"><span class="mobile-pill">Phase 1</span><h3>Kate</h3><p>Perfect Kate first.</p></article>
+        <article class="mobile-card"><span class="mobile-pill">Phase 2</span><h3>Revenue / Lead Quality Agent</h3><p>Lead quality and ad/channel visibility.</p></article>
+        <article class="mobile-card"><span class="mobile-pill">Phase 3</span><h3>Rep Oversight Agent</h3><p>Rep activity and pipeline discipline.</p></article>
+        <article class="mobile-card"><span class="mobile-pill">Phase 4</span><h3>Lender Desk Agent</h3><p>Guidelines, overlays, and lender fit logic.</p></article>
+        <article class="mobile-card"><span class="mobile-pill">Phase 5</span><h3>FlipLabs Ops Agent</h3><p>12-week course + GHL support later.</p></article>
+        <article class="mobile-card"><span class="mobile-pill">Phase 6</span><h3>Executive Roll-Up Layer</h3><p>One executive dashboard view across the agent stack.</p></article>
+      </section>
+      <section class="mobile-view" data-mobile-section="m-roadmap">
+        <article class="mobile-card"><span class="mobile-pill">Now</span><h3>1. Perfect Kate</h3><p>Focus on Page’s workflow, checklist clarity, blocker visibility, and follow-up friction.</p></article>
+        <article class="mobile-card"><span class="mobile-pill">Next</span><h3>2. Revenue / Lead Quality</h3><p>Fix weak leads and improve ad/channel visibility.</p></article>
+        <article class="mobile-card"><span class="mobile-pill">Then</span><h3>3. Rep Oversight</h3><p>Make rep activity and pipeline hygiene visible.</p></article>
+        <article class="mobile-card"><span class="mobile-pill">Later</span><h3>4–6. Lender Desk, FlipLabs, Roll-Up</h3><p>Specialized support layers after core lanes are tighter.</p></article>
+      </section>
+    </div>
+  </div>
+
   <div class="app">
     <aside class="sidebar">
       <div class="brand">
@@ -616,6 +695,14 @@
       scale = Math.min(2, Math.max(0.45, scale + delta));
       applyTransform();
     }, { passive: false });
+
+    const mobileTabs = [...document.querySelectorAll('.mobile-tab')];
+    const mobileViews = [...document.querySelectorAll('.mobile-view')];
+    mobileTabs.forEach(tab => tab.addEventListener('click', () => {
+      const target = tab.dataset.mobileView;
+      mobileTabs.forEach(t => t.classList.toggle('active', t === tab));
+      mobileViews.forEach(v => v.classList.toggle('active', v.dataset.mobileSection === target));
+    }));
 
     window.addEventListener('resize', fitToScreen);
     setTimeout(fitToScreen, 80);
